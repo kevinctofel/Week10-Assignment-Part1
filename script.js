@@ -48,7 +48,7 @@ function renderShoppingList() {
 	// you will be calling generateShoppingItemsString AND rendering to the page
 	// put your code here only
 	const shoppingListItems = generateShoppingItemsString(STORE);
-	$('.js-shopping-list').append(shoppingListItems);
+	$('.js-shopping-list').html(shoppingListItems);
 	console.log('`renderShoppingList` ran');
 }
 
