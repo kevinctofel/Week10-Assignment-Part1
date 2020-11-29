@@ -60,23 +60,49 @@ function handleNewItemSubmit() {
 	$('#js-shopping-list-form').submit(function (event) {
 		event.preventDefault();
 		let newItem = $('.js-shopping-list-entry').val();
+		//clear textbox
+		$('.js-shopping-list-entry').val("");
 		STORE.push({ id: cuid(), name: newItem, checked: false });
 		renderShoppingList();
 	});
 }
 
+function getItemIdFromElement(item) {
+	itemToCheck = $(item).closest("li").data("item-id");
+	return itemToCheck;
+}
 
 function handleItemCheckClicked() {
 	// this function will be responsible for when users click the "check" button on
 	// a shopping list item.
 	console.log('`handleItemCheckClicked` ran');
+	$('.js-shopping-list').on('click', `.js-item-toggle`, event => {
+		const itemId = getItemIdFromElement(event.currentTarget);
+		toggleShoppingItem(itemId);
+		renderShoppingList();
+	});
 }
 
+function toggleShoppingItem(itemId) {
+	itemToToggle = STORE.find(itemToToggle => itemToToggle.id == itemId);
+	itemToToggle.checked = !itemToToggle.checked;
+
+}
 
 function handleDeleteItemClicked() {
 	// this function will be responsible for when users want to delete a shopping list
 	// item
-	console.log('`handleDeleteItemClicked` ran')
+	console.log('`handleDeleteItemClicked` ran');
+	$('.js-shopping-list').on('click', `.js-item-delete`, event => {
+		// get the item id to remove from STORE
+		const itemToDelete = getItemIdFromElement(event.currentTarget);
+		// Find the index of the item to delete
+		let deletedItemIndex = STORE.findIndex(data => data.id == itemToDelete);
+		// Delete the item using its index
+		STORE.splice(deletedItemIndex, 1);
+		renderShoppingList();
+	});
+
 }
 
 // this function will be our callback when the page loads. it's responsible for
@@ -86,8 +112,8 @@ function handleDeleteItemClicked() {
 function handleShoppingList() {
 	renderShoppingList();
 	handleNewItemSubmit();
-	//handleItemCheckClicked();
-	//handleDeleteItemClicked();
+	handleItemCheckClicked();
+	handleDeleteItemClicked();
 
 }
 
